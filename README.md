@@ -1,67 +1,36 @@
-# 🦷 Dental Clinic SaaS - Foundation Layer (Person 1)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-### 🤖 AGENT INSTRUCTIONS (READ FIRST)
-You are acting as **Person 1 (Lead Architect)**. Your goal is to build the foundation of a multi-tenant NestJS backend.
-1. **Initialize** a new NestJS 10 project in the current directory.
-2. **Install** all dependencies listed in the Tech Stack.
-3. **Check Prerequisites**: Ensure Node.js and NestJS CLI are available locally.
-4. **Implement** the folder structure and all code for Modules 1-8 (Excluding Docker).
-5. **Enforce Isolation**: Every database query MUST be scoped by `tenantId`.
+## Getting Started
 
----
+First, run the development server:
 
-### 🛠 TECH STACK & INSTALLATION
-**Execute these commands first:**
 ```bash
-npm install @nestjs/mongoose mongoose @nestjs/jwt @nestjs/passport passport passport-jwt @nestjs/config @nestjs/swagger swagger-ui-express class-validator class-transformer bcrypt uuid slugify helmet compression
-npm install -D @types/bcrypt @types/passport-jwt @types/uuid.
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-ARCHITECTURE & CODING STANDARDS:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-​Global Prefix: All routes must start with /api/v1.
-​Security: Use helmet and compression in main.ts.
-​Multi-Tenancy: Data isolation is handled via a tenantId field in every schema.
-​Base Service: Create src/common/base/base.service.ts. All services must extend this to ensure they receive tenantId as the first argument for any CRUD operation.
-​Strict Types: No usage of any. Use .lean() for read queries.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-FOLDER STRUCTURE TO GENERATE:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-src/
-├── main.ts                      # Swagger, Helmet, Global Prefix
-├── app.module.ts                # Import Database, Tenant, Auth, Users
-├── common/
-│   ├── base/
-│   │   └── base.service.ts      # Abstract class for Tenant-aware CRUD
-│   ├── constants/               # Role { ADMIN, DOCTOR, RECEPTIONIST }
-│   ├── decorators/              # @Roles, @GetTenant, @CurrentUser
-│   ├── dto/                     # PaginationDto, PaginatedResult<T>
-│   ├── filters/                 # Global HttpExceptionFilter
-│   ├── guards/                  # JwtAuthGuard, RolesGuard
-│   ├── interceptors/            # TransformInterceptor (wraps responses)
-│   ├── middleware/              # TenantMiddleware (extracts tenantId)
-│   └── types/                   # express.d.ts (extends Request)
-├── config/                      # configuration.ts (Env mapping)
-└── modules/
-    ├── database/                # MongooseModule.forRootAsync
-    ├── tenant/                  # Registration, Settings, Slugify logic
-    ├── auth/                    # JWT Strategy, Login, Register
-    └── users/                   # CRUD for Clinic Staff
+## Learn More
 
-SCHEMAS & LOGIC DETAILS:
+To learn more about Next.js, take a look at the following resources:
 
-​1. Tenant Schema (Collection: tenants)
-​name, slug (auto-generated via slugify), plan (FREE, BASIC, PRO), isActive.
-​settings: workingHours, workingDays, appointmentDuration, currency.
-​2. User Schema (Collection: users)
-​tenantId (ObjectId, Ref: Tenant, Indexed).
-​role (Enum), passwordHash (select: false).
-​doctorProfile: Only for DOCTOR role (specialization, registrationNumber).
-​3. Auth Logic
-​POST /auth/register: Create a Tenant AND the first ADMIN user in one flow.
-​POST /auth/login: Issue JWT with payload: { sub, tenantId, role, email }.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-LOCAL DEVELOPMENT SETUP:
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-​Database: Ensure a local MongoDB instance is running at mongodb://localhost:27017/dental_saas.
-​Environment: Create a .env file with MONGODB_URI, JWT_SECRET, and PORT=3001.
-​Swagger: Available at http://localhost:3001/api/docs once the server starts.
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
